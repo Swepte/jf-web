@@ -1,95 +1,142 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useRef, useState } from "react";
+import {
+  Stepper,
+  Button,
+  Group,
+  Flex,
+  Text,
+  TextInput,
+  Checkbox,
+  Grid,
+} from "@mantine/core";
+import { Dropzone } from "@mantine/dropzone";
 
 export default function Home() {
+  const openRef = useRef<() => void>(null);
+  const [active, setActive] = useState(1);
+  const nextStep = () =>
+    setActive((current) => (current < 3 ? current + 1 : current));
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <>
+      <Flex
+        h={"100vh"}
+        w={"100vw"}
+        pos="relative"
+        align="center"
+        justify="center"
+        direction="column"
+      >
+        {active === 0 ? (
+          <form>
+            <TextInput
+              withAsterisk
+              label="Email"
+              placeholder="your@email.com"
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            <Checkbox mt="md" label="I agree to sell my privacy" />
+            <Group justify="flex-end" mt="md">
+              {/* <Button type="submit">Submit</Button> */}
+              <Button onClick={nextStep}>Submit</Button>
+            </Group>
+          </form>
+        ) : active === 1 ? (
+          <form>
+            <TextInput
+              withAsterisk
+              label="Reference No."
+              placeholder="your@email.com"
+            />
+            <Group justify="flex-end" mt="md">
+              {/* <Button type="submit">Submit</Button> */}
+              <Button onClick={nextStep}>Submit</Button>
+            </Group>
+          </form>
+        ) : active === 2 ? (
+          <form>
+            <Grid grow w="40vw">
+              <Grid.Col span={4}>
+                <TextInput
+                  withAsterisk
+                  label="First Name"
+                  placeholder="your@email.com"
+                />
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <TextInput
+                  withAsterisk
+                  label="Middle Name"
+                  placeholder="your@email.com"
+                />
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <TextInput
+                  withAsterisk
+                  label="Last Name"
+                  placeholder="your@email.com"
+                />
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <TextInput
+                  withAsterisk
+                  label="Email"
+                  placeholder="your@email.com"
+                />
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <TextInput
+                  withAsterisk
+                  label="Email"
+                  placeholder="your@email.com"
+                />
+              </Grid.Col>
+              <Grid.Col span={12}>
+                <Dropzone openRef={openRef} onDrop={() => {}}>
+                  {/* children */}
+                </Dropzone>
+              </Grid.Col>
+            </Grid>
+          </form>
+        ) : (
+          "error"
+        )}
+
+        {/* <Group justify="center" mt="xl">
+          <Button variant="default" onClick={prevStep}>
+            Back
+          </Button>
+          <Button onClick={nextStep}>Next step</Button>
+        </Group> */}
+        <Stepper
+          active={active}
+          onStepClick={setActive}
+          px="lg"
+          style={{
+            position: "absolute",
+            bottom: 40,
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <Stepper.Step label="First step" description="Create an account">
+            Step 1 content: Create an account
+          </Stepper.Step>
+          <Stepper.Step label="Second step" description="Verify email">
+            Step 2 content: Verify email
+          </Stepper.Step>
+          <Stepper.Step label="Final step" description="Get full access">
+            Step 3 content: Get full access
+          </Stepper.Step>
+          <Stepper.Completed>
+            <Text truncate="end">
+              Completed, click back button to get to previous step
+            </Text>
+          </Stepper.Completed>
+        </Stepper>
+      </Flex>
+    </>
   );
 }
