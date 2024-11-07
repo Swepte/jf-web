@@ -4,7 +4,7 @@ import * as yup from "yup";
 
 const prismaService = new PrismaClient();
 
-const postSchema = yup.object({
+export const postSchema = yup.object({
   firstName: yup.string().required("Firstname is required."),
   middleName: yup.string().optional(),
   lastName: yup.string().required("Lastname is required."),

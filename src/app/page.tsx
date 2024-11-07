@@ -10,16 +10,62 @@ import {
   TextInput,
   Checkbox,
   Grid,
+  Loader,
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
+import { postSchema } from "./api/applicants/route";
+import { useForm, yupResolver } from "@mantine/form";
+import * as yup from "yup";
 
+type TSchema = yup.InferType<typeof postSchema>;
 export default function Home() {
+  console.log(process.env);
+  const [result, setResult] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState<boolean>(false);
+  const [agree, setAgree] = useState<boolean>(false);
+  const form = useForm<TSchema>({
+    validate: yupResolver(postSchema),
+    initialValues: {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      mobileNo: [],
+      phoneNo: [],
+      address: [],
+      degree: "",
+      studentId: "",
+      email: "",
+      university: "",
+    },
+  });
+
   const openRef = useRef<() => void>(null);
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
+  // const prevStep = () =>
+  //   setActive((current) => (current > 0 ? current - 1 : current));
+
+  const sendEmail = (recipientEmail) => {
+    setLoading(true);
+    fetch("/api/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Specify the content type as JSON
+      },
+      body: JSON.stringify({
+        recipientName: "dwdww",
+        recipientEmail: recipientEmail,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => setResult(data))
+      .catch((error) => setResult(error))
+      .finally(() => {
+        setLoading(false);
+        nextStep();
+      });
+  };
   return (
     <>
       <Flex
@@ -30,67 +76,94 @@ export default function Home() {
         justify="center"
         direction="column"
       >
-        {active === 0 ? (
-          <form>
+        {loading ? (
+          <Loader color="blue" />
+        ) : active === 0 ? (
+          <>
             <TextInput
               withAsterisk
               label="Email"
               placeholder="your@email.com"
+              {...form.getInputProps("email")}
             />
-            <Checkbox mt="md" label="I agree to sell my privacy" />
+            <Checkbox
+              mt="md"
+              label="I agree to sell my privacy"
+              checked={agree}
+              onChange={(event) => setAgree(event.currentTarget.checked)}
+            />
             <Group justify="flex-end" mt="md">
-              {/* <Button type="submit">Submit</Button> */}
-              <Button onClick={nextStep}>Submit</Button>
+              {/* <Button onClick={nextStep} disabled={agree === false}>
+                Submit
+              </Button> */}
+              <Button
+                onClick={() => {
+                  form.validateField("email");
+                  if (form.validateField("email").hasError === false) {
+                    sendEmail(form.values.email);
+                  }
+                }}
+                disabled={agree === false}
+              >
+                Submit
+              </Button>
             </Group>
-          </form>
+          </>
         ) : active === 1 ? (
-          <form>
+          <>
             <TextInput
               withAsterisk
               label="Reference No."
-              placeholder="your@email.com"
+              {...form.getInputProps("studentId")}
             />
             <Group justify="flex-end" mt="md">
               {/* <Button type="submit">Submit</Button> */}
               <Button onClick={nextStep}>Submit</Button>
             </Group>
-          </form>
+          </>
         ) : active === 2 ? (
           <form>
             <Grid grow w="40vw">
-              <Grid.Col span={4}>
+              <Grid.Col span={12}>
                 <TextInput
                   withAsterisk
                   label="First Name"
-                  placeholder="your@email.com"
+                  {...form.getInputProps("firstName")}
                 />
               </Grid.Col>
-              <Grid.Col span={4}>
+              <Grid.Col span={12}>
                 <TextInput
                   withAsterisk
                   label="Middle Name"
-                  placeholder="your@email.com"
+                  {...form.getInputProps("middleName")}
                 />
               </Grid.Col>
-              <Grid.Col span={4}>
+              <Grid.Col span={12}>
                 <TextInput
                   withAsterisk
                   label="Last Name"
-                  placeholder="your@email.com"
+                  {...form.getInputProps("lastName")}
                 />
               </Grid.Col>
-              <Grid.Col span={4}>
+              <Grid.Col span={12}>
                 <TextInput
                   withAsterisk
                   label="Email"
-                  placeholder="your@email.com"
+                  {...form.getInputProps("email")}
                 />
               </Grid.Col>
-              <Grid.Col span={4}>
+              <Grid.Col span={12}>
                 <TextInput
                   withAsterisk
-                  label="Email"
-                  placeholder="your@email.com"
+                  label="Address"
+                  {...form.getInputProps("address")}
+                />
+              </Grid.Col>
+              <Grid.Col span={12}>
+                <TextInput
+                  withAsterisk
+                  label="Degree"
+                  {...form.getInputProps("degree")}
                 />
               </Grid.Col>
               <Grid.Col span={12}>
@@ -101,18 +174,12 @@ export default function Home() {
             </Grid>
           </form>
         ) : (
-          "error"
+          <Text>{JSON.stringify(result)}</Text>
         )}
-
-        {/* <Group justify="center" mt="xl">
-          <Button variant="default" onClick={prevStep}>
-            Back
-          </Button>
-          <Button onClick={nextStep}>Next step</Button>
-        </Group> */}
         <Stepper
           active={active}
           onStepClick={setActive}
+          allowNextStepsSelect={false}
           px="lg"
           style={{
             position: "absolute",
