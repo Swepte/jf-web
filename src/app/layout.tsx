@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -25,8 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head></head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <MantineProvider>{children}</MantineProvider>
       </body>
     </html>
   );
