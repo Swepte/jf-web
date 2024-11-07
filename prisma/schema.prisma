@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Applicants {
+  id        Int       @id @default(autoincrement())
+  uuid      String    @unique @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  firstName    String
+  middleName   String?
+  lastName     String
+  mobileNo     String[]
+  phoneNo      String[]
+  address      String[]
+  degree       String?
+  studentId    String?
+  university   String?
+  email        String         @unique
+  Applications Applications[]
+
+  @@map("applicants")
+}
+
+model Applications {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+  deletedAt DateTime @default(now())
+
+  referenceNo String
+  positions   String[]
+  applicantId String
+  Applicants  Applicants @relation(fields: [applicantId], references: [uuid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("applications")
+}
+
+model Positions {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+  deletedAt DateTime @default(now())
+
+  department Departments    @default(CRYTPEX)
+  value      String
+  status     PositionStatus @default(CLOSED)
+
+  @@map("positions")
+}
+
+enum PositionStatus {
+  OPEN
+  CLOSED
+}
+
+enum Departments {
+  WEST_PACIFIC
+  CRYTPEX
+  BLUE_SANDS
+}
