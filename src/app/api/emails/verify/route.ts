@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       },
     });
     return NextResponse.json({ message: "Authenticated" }, { status: 202 });
-  } catch (e) {
+  } catch {
     return NextResponse.json(
       { message: "Authentication Failed." },
       { status: 500 }

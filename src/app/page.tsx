@@ -14,18 +14,36 @@ import {
   PinInput,
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
-import { postSchema } from "./api/applications/route";
 import { useForm, yupResolver } from "@mantine/form";
 import * as yup from "yup";
 import { post, postForm } from "@/utils/http";
 import { notifications } from "@mantine/notifications";
 import { HttpStatusCode } from "axios";
 
-export const otherSchema = yup.object({
+const otherSchema = yup.object({
   referenceNo: yup.string().min(6).required(),
   file: yup.mixed(),
 });
+
 type TotherSchema = yup.InferType<typeof otherSchema>;
+
+const postSchema = yup.object({
+  positions: yup.array(yup.string()).required("Position is required."),
+  Applicants: yup
+    .object({
+      firstName: yup.string().required("Firstname is required."),
+      middleName: yup.string().optional(),
+      lastName: yup.string().required("Lastname is required."),
+      mobileNo: yup.array(yup.string()).required("Mobile No is required."),
+      phoneNo: yup.array(yup.string()).optional(),
+      address: yup.array(yup.string()).required("Address is required."),
+      degree: yup.string().optional(),
+      email: yup.string().email("Invalid email address").required(),
+      university: yup.string().optional(),
+    })
+    .required("Applicants information is required"),
+});
+
 type TSchema = yup.InferType<typeof postSchema>;
 
 export default function Home() {
@@ -76,7 +94,7 @@ export default function Home() {
         setLoading(false);
         nextStep();
       }
-    } catch (e) {
+    } catch {
       setLoading(false);
       notifications.show({
         color: "red",
@@ -92,7 +110,8 @@ export default function Home() {
       if (req.status === HttpStatusCode.Accepted) {
         console.log(req);
         const form = new FormData();
-        //@ts-ignore
+
+        // @ts-expect-error dwadiwawad
         form.append("applicationId", req?.data?.data?.uuid);
         form.append("cvFile", otherForm.values.file[0]);
         const upload = await postForm("/api/applications/upload", form);

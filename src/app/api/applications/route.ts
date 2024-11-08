@@ -5,7 +5,7 @@ import * as yup from "yup";
 
 const prismaService = new PrismaClient({ log: ["error"] });
 
-export const postSchema = yup.object({
+const postSchema = yup.object({
   positions: yup.array(yup.string()).required("Position is required."),
   Applicants: yup
     .object({

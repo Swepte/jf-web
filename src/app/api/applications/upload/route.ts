@@ -2,7 +2,6 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as path from "path";
-import * as yup from "yup";
 
 const s3Client = new S3Client({
   region: "ap-southeast-1",
@@ -71,7 +70,7 @@ export async function POST(request: NextRequest) {
       }
       return NextResponse.json({ cvFile: cvFileName }, { status: 202 });
     }
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to upload files" },
       { status: 500 }
