@@ -4,8 +4,7 @@ import * as yup from "yup";
 
 const prismaService = new PrismaClient();
 
-const postSchema = yup.object({
-  referenceNo: yup.string().required("ReferenceNo. is required."),
+export const postSchema = yup.object({
   positions: yup.array(yup.string()).required("Position is required."),
   Applicants: yup
     .object({
@@ -16,7 +15,6 @@ const postSchema = yup.object({
       phoneNo: yup.array(yup.string()).optional(),
       address: yup.array(yup.string()).required("Address is required."),
       degree: yup.string().optional(),
-      studentId: yup.string().optional(),
       email: yup.string().email("Invalid email address").required(),
       university: yup.string().optional(),
     })
@@ -28,9 +26,11 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
     await postSchema.validate(data, { abortEarly: false });
     const { Applicants: applicants, ...app } = data;
+    const code = await generateCode();
     const a = await prismaService.applications.create({
       data: {
         ...app,
+        referenceNo: code,
         Applicants: {
           create: applicants,
         },
@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({
       data: {
+        referenceNo: a.referenceNo,
         ...data,
       },
       success: true,
@@ -63,6 +64,21 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+async function generateCode() {
+  const find = await prismaService.applications.findFirst({
+    orderBy: {
+      id: "desc",
+    },
+    where: {
+      isDeleted: false,
+    },
+  });
+
+  return (find?.id || 0 + 1)
+    .toString()
+    .padStart(6, Math.floor(Math.random() * 99999999).toString());
 }
 
 export async function GET(request: NextRequest) {

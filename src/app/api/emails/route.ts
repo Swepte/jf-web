@@ -3,8 +3,9 @@ import { sendEmail } from "@/utils/mail.utils";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
+import * as argon from "argon2";
 
-const prismaService = new PrismaClient({ log: ["error"] });
+const prismaService = new PrismaClient();
 
 const postSchema = yup.object({
   recipientEmail: yup.string().email().required(),
@@ -13,7 +14,9 @@ const postSchema = yup.object({
 export async function POST(request: NextRequest) {
   try {
     const { recipientEmail } = await request.json();
+
     await postSchema.validate({ recipientEmail });
+
     const sender = {
       name: "Authentication Code",
       address: "no-reply@example.com",
@@ -26,31 +29,27 @@ export async function POST(request: NextRequest) {
       },
     ];
 
-    const find = await prismaService.authenticationCodes.findFirst({
-      orderBy: {
-        id: "desc",
-      },
+    await prismaService.authenticationCodes.deleteMany({
       where: {
         isDeleted: false,
+        email: recipientEmail,
       },
     });
 
-    const pad = (find?.id || 0 + 1)
-      .toString()
-      .padStart(6, Math.floor(Math.random() * 99999999).toString());
+    const generatedCode = await generateCode();
 
     const result = await sendEmail({
       sender,
       recipients,
       subject: "Cryptex Authentication Code",
-      message: pad,
-      html: TemplateMail(pad),
+      message: generatedCode,
+      html: TemplateMail(generatedCode),
     });
 
     await prismaService.authenticationCodes.create({
       data: {
         email: recipientEmail,
-        code: pad,
+        code: await hash(generatedCode),
       },
     });
 
@@ -73,6 +72,35 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    return NextResponse.json({ message: error }, { status: 500 });
+    return NextResponse.json({ message: "There's an error." }, { status: 500 });
   }
+}
+
+async function hash(code: string) {
+  const secret = process.env.ARG_SECRET;
+  if (!secret) {
+    throw new Error("ARG_SECRET environment variable is not set.");
+  }
+
+  const hash = await argon.hash(code, {
+    type: argon.argon2id,
+    secret: Buffer.from(secret),
+  });
+
+  return hash;
+}
+
+async function generateCode() {
+  const find = await prismaService.authenticationCodes.findFirst({
+    orderBy: {
+      id: "desc",
+    },
+    where: {
+      isDeleted: false,
+    },
+  });
+
+  return (find?.id || 0 + 1)
+    .toString()
+    .padStart(6, Math.floor(Math.random() * 99999999).toString());
 }

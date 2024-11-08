@@ -29,7 +29,6 @@ model Applicants {
   phoneNo      String[]
   address      String[]
   degree       String?
-  studentId    String?
   university   String?
   email        String         @unique
   Applications Applications[]

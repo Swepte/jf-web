@@ -12,7 +12,6 @@ export const postSchema = yup.object({
   phoneNo: yup.array(yup.string()).optional(),
   address: yup.array(yup.string()).required("Address is required."),
   degree: yup.string().optional(),
-  studentId: yup.string().optional(),
   email: yup.string().email("Invalid email address").required(),
   university: yup.string().optional(),
 });

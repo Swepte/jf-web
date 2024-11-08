@@ -1,8 +1,7 @@
-import TemplateMail from "@/template/email-temp";
-import { sendEmail } from "@/utils/mail.utils";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
+import * as argon from "argon2";
 
 const postSchema = yup.object({
   code: yup.number().required("Code is missing."),
@@ -22,26 +21,43 @@ export async function POST(request: NextRequest) {
       },
       where: {
         email: email,
-        code: code,
+        isDeleted: false,
       },
     });
 
-    if (find) {
-      await prismaService.authenticationCodes.update({
-        data: {
-          isDeleted: true,
-        },
-        where: {
-          uuid: find.uuid,
-        },
-      });
-      return NextResponse.json({ message: "Authenticated" }, { status: 202 });
+    if (!find) {
+      throw new Error();
     }
-    return NextResponse.json(
-      { error: "Authentication Failed." },
-      { status: 401 }
-    );
+    await verifyCode(find.code, code);
+    await prismaService.authenticationCodes.update({
+      data: {
+        isDeleted: true,
+      },
+      where: {
+        uuid: find.uuid,
+      },
+    });
+    return NextResponse.json({ message: "Authenticated" }, { status: 202 });
   } catch (e) {
-    return NextResponse.json({ message: e }, { status: 500 });
+    return NextResponse.json(
+      { message: "Authentication Failed." },
+      { status: 500 }
+    );
   }
+}
+
+async function verifyCode(hashedCode: string, code: string) {
+  const secret = process.env.ARG_SECRET;
+  if (!secret) {
+    throw new Error();
+  }
+  const verify = await argon.verify(hashedCode, code, {
+    secret: Buffer.from(secret),
+  });
+
+  if (!verify) {
+    throw new Error();
+  }
+
+  return true;
 }
