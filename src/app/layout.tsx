@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { MantineProvider } from "@mantine/core";
+
+import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 
 import "@mantine/dropzone/styles.css";
 import localFont from "next/font/local";
 import "./globals.css";
+import "@mantine/notifications/styles.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,7 +33,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider>
+          <Notifications />
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );
