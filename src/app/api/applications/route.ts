@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({
       data: {
-        referenceNo: a.referenceNo,
+        uuid: a.uuid,
+        reference: a.referenceNo,
         ...data,
       },
       success: true,

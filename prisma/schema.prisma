@@ -44,7 +44,7 @@ model Applications {
   isDeleted Boolean  @default(false)
   deletedAt DateTime @default(now())
 
-  referenceNo String
+  referenceNo String     @unique
   positions   String[]
   applicantId String
   Applicants  Applicants @relation(fields: [applicantId], references: [uuid], onDelete: NoAction, onUpdate: NoAction)
@@ -76,7 +76,7 @@ model AuthenticationCodes {
   deletedAt DateTime @default(now())
 
   email String
-  code  String
+  code  String @unique
 
   @@map("authentication_codes")
 }

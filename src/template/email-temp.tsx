@@ -1,247 +1,157 @@
 const TemplateMail = (reference: string) => {
-  return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-<head>
-<!--[if gte mso 9]>
-<xml>
-  <o:OfficeDocumentSettings>
-    <o:AllowPNG/>
-    <o:PixelsPerInch>96</o:PixelsPerInch>
-  </o:OfficeDocumentSettings>
-</xml>
-<![endif]-->
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="x-apple-disable-message-reformatting">
-  <!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
-  <title></title>
-  
-    <style type="text/css">
-      
-      @media only screen and (min-width: 520px) {
-        .u-row {
-          width: 500px !important;
-        }
+  return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Your Authentication Code for the Job Fair</title>
+      <style>
+          /* General Reset */
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+          }
+          body {
+              font-family: Arial, sans-serif;
+              background-color: #121212; /* Dark background */
+              color: #fff; /* White text for dark theme */
+              padding: 20px;
+          }
 
-        .u-row .u-col {
-          vertical-align: top;
-        }
+          /* Main container */
+          .email-container {
+              background-color: #1e1e1e; /* Dark grey background */
+              width: 100%;
+              max-width: 600px;
+              margin: 0 auto;
+              border-radius: 8px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+              overflow: hidden;
+          }
 
-        
-            .u-row .u-col-100 {
-              width: 500px !important;
-            }
-          
-      }
+          /* Header */
+          .email-header {
+              background-color: #000000; /* Black background */
+              padding: 20px;
+              color: #fff;
+              text-align: center;
+          }
 
-      @media only screen and (max-width: 520px) {
-        .u-row-container {
-          max-width: 100% !important;
-          padding-left: 0px !important;
-          padding-right: 0px !important;
-        }
+          .email-header img {
+              width: 120px; /* Adjust the size of your logo */
+              margin-bottom: 10px;
+              filter: brightness(0) invert(1); /* Apply white filter to logo */
+          }
 
-        .u-row {
-          width: 100% !important;
-        }
+          .email-header h1 {
+              font-size: 24px;
+              margin-bottom: 5px;
+          }
 
-        .u-row .u-col {
-          display: block !important;
-          width: 100% !important;
-          min-width: 320px !important;
-          max-width: 100% !important;
-        }
+          .email-header p {
+              font-size: 14px;
+          }
 
-        .u-row .u-col > div {
-          margin: 0 auto;
-        }
+          /* Authentication Code Section */
+          .auth-code-section {
+              padding: 30px;
+              background-color: #333333; /* Dark grey section */
+              text-align: center;
+          }
 
+          .auth-code {
+              font-size: 32px;
+              font-weight: bold;
+              color: #FF5722; /* Accent color (orange) */
+              margin-top: 10px;
+              padding: 10px 20px;
+              background-color: #424242; /* Slightly lighter dark background */
+              border-radius: 4px;
+          }
 
-}
-    
-body{margin:0;padding:0}table,td,tr{border-collapse:collapse;vertical-align:top}p{margin:0}.ie-container table,.mso-container table{table-layout:fixed}*{line-height:inherit}a[x-apple-data-detectors=true]{color:inherit!important;text-decoration:none!important}
+          /* Instructions */
+          .email-body {
+              padding: 20px;
+              font-size: 16px;
+              color: #ccc; /* Lighter text for better readability */
+              line-height: 1.6;
+          }
 
+          .email-body p {
+              margin-bottom: 15px;
+          }
 
-table, td { color: #000000; } </style>
-  
-  
+          .email-body strong {
+              color: #fff; /* White text for emphasis */
+          }
 
-</head>
+          /* Footer */
+          .email-footer {
+              padding: 20px;
+              background-color: #1e1e1e; /* Dark grey background */
+              text-align: center;
+              font-size: 14px;
+              color: #777; /* Light grey text */
+          }
 
-<body class="clean-body u_body" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #F7F8F9;color: #000000">
-  <!--[if IE]><div class="ie-container"><![endif]-->
-  <!--[if mso]><div class="mso-container"><![endif]-->
-  <table style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #F7F8F9;width:100%" cellpadding="0" cellspacing="0">
-  <tbody>
-  <tr style="vertical-align: top">
-    <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-    <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #F7F8F9;"><![endif]-->
-    
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="500" style="background-color: #000000;width: 500px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-100" style="max-width: 320px;min-width: 500px;display: table-cell;vertical-align: top;">
-  <div style="background-color: #000000;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="line-height: 140%; text-align: center;"><span style="line-height: 19.6px;"><span style="line-height: 36.4px; font-family: 'arial black', AvenirNext-Heavy, 'avant garde', arial; font-size: 26px; color: #f7f8f9;">CRYPTEX CONSULTING LTD.</span></span></p>
-<p style="line-height: 140%; text-align: center;"> </p>
-  </div>
+          .email-footer img {
+              width: 100px; /* Adjust the size of your logo */
+              margin-top: 10px;
+              filter: brightness(0) invert(1); /* Apply white filter to logo */
+          }
 
-      </td>
-    </tr>
-  </tbody>
-</table>
+          .email-footer a {
+              color: #FF5722; /* Accent color for links */
+              text-decoration: none;
+          }
 
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
+          /* Responsive */
+          @media only screen and (max-width: 600px) {
+              .email-container {
+                  width: 100% !important;
+                  padding: 0 15px;
+              }
+              .auth-code {
+                  font-size: 28px !important;
+              }
+          }
+      </style>
+  </head>
+  <body>
+      <div class="email-container">
+          <!-- Header with Logo -->
+          <div class="email-header">
+              <img src="https://cryptex-assets.s3.ap-southeast-1.amazonaws.com/logo/cryptex_384x384.svg" alt="Cryptex Logo">
+              <h1>Authentication Code for the Job Fair</h1>
+              <p>Thank you for registering for the upcoming Job Fair.</p>
+          </div>
 
+          <!-- Authentication Code Section -->
+          <div class="auth-code-section">
+              <p>Your Authentication Code is:</p>
+              <div class="auth-code">
+                  ${reference}
+              </div>
+          </div>
 
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="500" style="width: 500px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-100" style="max-width: 320px;min-width: 500px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="line-height: 140%; text-align: center;">Here is your Reference No:</p>
-  </div>
+          <!-- Body -->
+          <div class="email-body">
+              <p>To complete your registration for the Job Fair, please enter the above Authentication Code on the Job Fair registration portal. If you did not initiate this request, please disregard this email.</p>
+              <p>If you need assistance, please contact us at <a href="mailto:consult@cryptex.ph">[Support Email]</a>.</p>
+          </div>
 
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="500" style="width: 500px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-100" style="max-width: 320px;min-width: 500px;display: table-cell;vertical-align: top;">
-  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="line-height: 140%; text-align: center;"><span style="text-decoration: underline; line-height: 19.6px;"><span style="font-size: 24px; line-height: 33.6px;">${reference}</span></span></p>
-  </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-  
-  
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px;"><tr style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="500" style="background-color: #170101;width: 500px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-100" style="max-width: 320px;min-width: 500px;display: table-cell;vertical-align: top;">
-  <div style="background-color: #170101;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-<div align="center" style="direction: ltr;">
-  <div style="display: table; max-width:-1px;">
-  <!--[if (mso)|(IE)]><table width="-1" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-collapse:collapse;" align="center"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; mso-table-lspace: 0pt;mso-table-rspace: 0pt; width:-1px;"><tr><![endif]-->
-  
-    
-    
-    <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-  </div>
-</div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-    <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
-    </td>
-  </tr>
-  </tbody>
-  </table>
-  <!--[if mso]></div><![endif]-->
-  <!--[if IE]></div><![endif]-->
-</body>
-
-</html>`;
+          <!-- Footer with Logo -->
+          <div class="email-footer">
+              <p>Best regards,<br>The Bluesands Team</p>
+              <img src="https://cryptex-assets.s3.ap-southeast-1.amazonaws.com/logo/cryptex_128x128.svg" alt="Cryptex Logo">
+              <br><br>
+              <p><a href="https://cryptex.ph/">Visit our website</a> for more information.</p>
+          </div>
+      </div>
+  </body>
+  </html>
+  `;
 };
 
 export default TemplateMail;
