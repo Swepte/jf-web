@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({
       data: {
-        // id: a.uuid,
         ...data,
       },
       success: true,
