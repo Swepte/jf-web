@@ -33,12 +33,12 @@ export async function post<T>(url: string, data: unknown) {
   return res;
 }
 
-// export async function postForm<T>(url: string, data?: any) {
-//   const res = await i.post<T>(url, data, {
-//     headers: {
-//       "Content-Type": "multipart/form-data",
-//     },
-//     method: "POST",
-//   });
-//   return res;
-// }
+export async function postForm<T>(url: string, data: unknown) {
+  const res = await i.post<T>(url, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    method: "POST",
+  });
+  return res;
+}

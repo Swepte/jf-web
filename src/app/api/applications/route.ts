@@ -3,7 +3,7 @@ import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 
-const prismaService = new PrismaClient();
+const prismaService = new PrismaClient({ log: ["error"] });
 
 export const postSchema = yup.object({
   positions: yup.array(yup.string()).required("Position is required."),

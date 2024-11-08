@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 import * as argon from "argon2";
 
-const prismaService = new PrismaClient();
+const prismaService = new PrismaClient({ log: ["error"] });
 
 const postSchema = yup.object({
   recipientEmail: yup.string().email().required(),
