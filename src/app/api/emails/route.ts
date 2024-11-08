@@ -1,3 +1,4 @@
+import TemplateMail from "@/template/email-temp";
 import { sendEmail } from "@/utils/mail.utils";
 import { NextRequest } from "next/server";
 
@@ -19,7 +20,8 @@ export async function POST(request: NextRequest) {
       sender,
       receipients,
       subject: "REFERENCE NO",
-      message: "hndwapddwaiojoi",
+      message: "69696969",
+      html: TemplateMail("69696969"),
     });
     return Response.json({
       accepted: result.accepted,

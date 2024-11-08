@@ -1,7 +1,13 @@
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-
+type SendEmailDto = {
+  sender: Mail.Address;
+  receipients: Mail.Address[];
+  subject: string;
+  message: string;
+  html: string;
+};
 const transporter = nodemailer.createTransport({
   host: process.env.MAIL_HOST,
   port: process.env.MAIL_PORT,
@@ -12,18 +18,13 @@ const transporter = nodemailer.createTransport({
   },
 } as SMTPTransport.Options);
 
-type SendEmailDto = {
-  sender: Mail.Address;
-  receipients: Mail.Address[];
-  subject: string;
-  message: string;
-};
 export const sendEmail = async (dto: SendEmailDto) => {
-  const { sender, receipients, subject, message } = dto;
+  const { sender, receipients, subject, message, html } = dto;
   return await transporter.sendMail({
     from: sender,
     to: receipients,
     subject: subject,
     text: message,
+    html: html,
   });
 };

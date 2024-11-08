@@ -46,7 +46,7 @@ export default function Home() {
   // const prevStep = () =>
   //   setActive((current) => (current > 0 ? current - 1 : current));
 
-  const sendEmail = (recipientEmail) => {
+  const sendEmail = (recipientEmail: string) => {
     setLoading(true);
     fetch("/api/emails", {
       method: "POST",
