@@ -27,13 +27,17 @@ export async function POST(request: NextRequest) {
     await postSchema.validate(data, { abortEarly: false });
     const { Applicants: applicants, ...app } = data;
     const code = await generateCode();
+    const isExist = await isApplicantExisting(data?.Applicants?.email);
     const a = await prismaService.applications.create({
       data: {
         ...app,
         referenceNo: code,
-        Applicants: {
-          create: applicants,
-        },
+        applicantId: isExist ? isExist.uuid : undefined,
+        Applicants: isExist
+          ? undefined
+          : {
+              create: applicants,
+            },
       },
       include: {
         Applicants: true,
@@ -80,6 +84,17 @@ async function generateCode() {
   return (find?.id || 0 + 1)
     .toString()
     .padStart(6, Math.floor(Math.random() * 99999999).toString());
+}
+
+async function isApplicantExisting(email: string) {
+  const app = prismaService.applicants.findFirst({
+    where: {
+      isDeleted: false,
+      email: email,
+    },
+  });
+
+  return app;
 }
 
 export async function GET(request: NextRequest) {
