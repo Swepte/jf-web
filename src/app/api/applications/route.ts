@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 
@@ -43,15 +44,20 @@ export async function POST(request: NextRequest) {
         Applicants: true,
       },
     });
-    return NextResponse.json({
-      data: {
-        uuid: a.uuid,
-        reference: a.referenceNo,
-        ...data,
+    return NextResponse.json(
+      {
+        data: {
+          uuid: a.uuid,
+          reference: a.referenceNo,
+          ...data,
+        },
+        success: true,
+        message: "Form submitted successfully!",
       },
-      success: true,
-      message: "Form submitted successfully!",
-    });
+      {
+        status: HttpStatusCode.Accepted,
+      }
+    );
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       const errorDetails = error.inner.map((err) => ({
