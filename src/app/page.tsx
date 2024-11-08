@@ -16,6 +16,7 @@ import { Dropzone } from "@mantine/dropzone";
 import { postSchema } from "./api/applicants/route";
 import { useForm, yupResolver } from "@mantine/form";
 import * as yup from "yup";
+import { post } from "@/utils/http";
 
 type TSchema = yup.InferType<typeof postSchema>;
 export default function Home() {
@@ -46,25 +47,21 @@ export default function Home() {
   // const prevStep = () =>
   //   setActive((current) => (current > 0 ? current - 1 : current));
 
-  const sendEmail = (recipientEmail: string) => {
+  const sendEmail = async (recipientEmail: string) => {
     setLoading(true);
-    fetch("/api/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Specify the content type as JSON
-      },
-      body: JSON.stringify({
-        recipientName: "dwdww",
-        recipientEmail: recipientEmail,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => setResult(data))
-      .catch((error) => setResult(error))
-      .finally(() => {
-        setLoading(false);
-        nextStep();
-      });
+
+    //   .then((res) => res.json())
+    //   .then((data) => setResult(data))
+    //   .catch((error) => setResult(error))
+    //   .finally(() => {
+    //     setLoading(false);
+    //     nextStep();
+    //   });
+
+    post("/api/emails", {
+      recipientName: "Hello",
+      recipientEmail: recipientEmail,
+    });
   };
   return (
     <>
