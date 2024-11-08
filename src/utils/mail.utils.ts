@@ -3,7 +3,7 @@ import Mail from "nodemailer/lib/mailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 type SendEmailDto = {
   sender: Mail.Address;
-  receipients: Mail.Address[];
+  recipients: Mail.Address[];
   subject: string;
   message: string;
   html: string;
@@ -17,10 +17,10 @@ const transporter = nodemailer.createTransport({
 } as SMTPTransport.Options);
 
 export const sendEmail = async (dto: SendEmailDto) => {
-  const { sender, receipients, subject, message, html } = dto;
+  const { sender, recipients, subject, message, html } = dto;
   return await transporter.sendMail({
     from: sender,
-    to: receipients,
+    to: recipients,
     subject: subject,
     text: message,
     html: html,

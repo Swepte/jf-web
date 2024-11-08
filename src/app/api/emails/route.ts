@@ -4,10 +4,10 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 
-const prismaService = new PrismaClient();
+const prismaService = new PrismaClient({ log: ["error"] });
 
 const postSchema = yup.object({
-  recepientEmail: yup.string().email().required(),
+  recipientEmail: yup.string().email().required(),
 });
 
 export async function POST(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       address: "no-reply@example.com",
     };
 
-    const receipients = [
+    const recipients = [
       {
         name: "Applicant",
         address: recipientEmail,
@@ -35,37 +35,31 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (find) {
-      const pad = (find.id + 1)
-        .toString()
-        .padStart(6, Math.floor(Math.random() * 99999999).toString());
+    const pad = (find?.id || 0 + 1)
+      .toString()
+      .padStart(6, Math.floor(Math.random() * 99999999).toString());
 
-      const result = await sendEmail({
-        sender,
-        receipients,
-        subject: "Cryptex Authentication Code",
-        message: pad,
-        html: TemplateMail(pad),
-      });
+    const result = await sendEmail({
+      sender,
+      recipients,
+      subject: "Cryptex Authentication Code",
+      message: pad,
+      html: TemplateMail(pad),
+    });
 
-      await prismaService.authenticationCodes.create({
-        data: {
-          email: recipientEmail,
-          code: pad,
-        },
-      });
+    await prismaService.authenticationCodes.create({
+      data: {
+        email: recipientEmail,
+        code: pad,
+      },
+    });
 
-      return NextResponse.json(
-        {
-          id: result.messageId,
-          message: result.accepted,
-        },
-        { status: 400 }
-      );
-    }
     return NextResponse.json(
-      { error: "Email sending failed, please try again." },
-      { status: 500 }
+      {
+        id: result.messageId,
+        message: result.accepted,
+      },
+      { status: 202 }
     );
   } catch (error) {
     if (error instanceof yup.ValidationError) {
