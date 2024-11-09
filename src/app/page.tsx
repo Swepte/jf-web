@@ -77,9 +77,6 @@ export default function Home() {
   const [active, setActive] = useState(0);
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
-  // const prevStep = () =>
-  //   setActive((current) => (current > 0 ? current - 1 : current));
-
   const sendEmail = async (recipientEmail: string) => {
     setLoading(true);
     try {
@@ -110,8 +107,7 @@ export default function Home() {
       if (req.status === HttpStatusCode.Accepted) {
         console.log(req);
         const form = new FormData();
-
-        // @ts-expect-error dwadiwawad
+        // @ts-expect-error req data
         form.append("applicationId", req?.data?.data?.uuid);
         form.append("cvFile", otherForm.values.file[0]);
         const upload = await postForm("/api/applications/upload", form);
@@ -122,25 +118,6 @@ export default function Home() {
           });
         }
       }
-
-      // if (req.status === HttpStatusCode.Accepted) {
-      //   console.log(req);
-      //   notifications.show({
-      //     title: "Success",
-      //     message: "Successfully send email",
-      //   });
-      //   const form = new FormData();
-      //   //@ts-ignore
-      //   form.append("applicationId", req?.data?.uuid);
-      //   form.append("cvFile", otherForm.values.file);
-      //   const upload = await postForm("/api/applications/upload", form);
-      //   if (upload.status === HttpStatusCode.Accepted) {
-      //     notifications.show({
-      //       title: "Success",
-      //       message: "Successfully send email",
-      //     });
-      //   }
-      // }
     } catch {
       notifications.show({
         color: "red",
@@ -307,11 +284,7 @@ export default function Home() {
                   <Dropzone
                     openRef={openRef}
                     onDrop={(files) => otherForm.setFieldValue("file", files)}
-                    // onDrop={(files) => console.log("accepted files", files)    }
-                    // {...otherForm.getInputProps("file")}
-                  >
-                    {/* children */}
-                  </Dropzone>
+                  />
                 </Grid.Col>
                 <Grid.Col span={12}>
                   <Button type="submit" w="100%">
