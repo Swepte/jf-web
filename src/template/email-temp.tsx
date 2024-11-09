@@ -153,5 +153,4 @@ const TemplateMail = (reference: string) => {
   </html>
   `;
 };
-
 export default TemplateMail;
