@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 import * as argon from "argon2";
+import { applyRateLimit } from "@/utils/rate-limit";
 
 const prismaService = new PrismaClient({ log: ["error"] });
 
@@ -14,7 +15,8 @@ const postSchema = yup.object({
 export async function POST(request: NextRequest) {
   try {
     const { recipientEmail } = await request.json();
-
+    const rateLimitResponse = applyRateLimit(request);
+    if (rateLimitResponse) return rateLimitResponse;
     await postSchema.validate({ recipientEmail });
 
     const sender = {

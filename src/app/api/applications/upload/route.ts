@@ -1,7 +1,10 @@
+import { applyRateLimit } from "@/utils/rate-limit";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as path from "path";
+import * as _ from "lodash";
+import { upperCase } from "lodash";
 
 const s3Client = new S3Client({
   region: "ap-southeast-1",
@@ -11,13 +14,15 @@ const s3Client = new S3Client({
   },
 });
 
-const prismaService = new PrismaClient();
+const prismaService = new PrismaClient({ log: ["error"] });
 export async function POST(request: NextRequest) {
   try {
+    const rateLimitResponse = applyRateLimit(request);
+    if (rateLimitResponse) return rateLimitResponse;
     const data = await request.formData();
     const applicationId = data.get("applicationId") as string;
     const cvFile = data.get("cvFile") as File;
-    const otherFile = data.getAll("otherFile") as File[];
+    const otherFile = data.get("otherFile") as File | null;
     if (!cvFile) {
       return NextResponse.json(
         { error: "No CV file uploaded" },
@@ -35,9 +40,9 @@ export async function POST(request: NextRequest) {
     });
 
     if (find) {
-      const cvFileName = `applicants/cv-resume/${find.Applicants.firstName}-${
+      const cvFileName = `applicants/cv-resume/${_.upperCase(
         find.Applicants.lastName
-      }${path.extname(cvFile.name)}`;
+      )}-${find.referenceNo}${path.extname(cvFile.name)}`;
       const params = {
         Bucket: "cryptex-job-fair",
         Key: cvFileName,
@@ -46,33 +51,34 @@ export async function POST(request: NextRequest) {
       };
       await s3Client.send(new PutObjectCommand(params));
 
-      if (otherFile) {
-        const oF = await Promise.all(
-          otherFile.map(async (v, key) => {
-            const fileName = `applicants/other-files/${
-              find.Applicants.firstName
-            }-${find.Applicants.lastName}-${key}${path.extname(cvFile.name)}`;
-            const params = {
-              Bucket: "cryptex-job-fair",
-              Key: fileName,
-              Body: Buffer.from(await v.arrayBuffer()),
-              ContentType: v.type,
-            };
-            await s3Client.send(new PutObjectCommand(params));
+      if (otherFile && otherFile.size > 0) {
+        const ofName = `applicants/other-files/${_.upperCase(
+          find.Applicants.lastName
+        )}-${find.referenceNo}${path.extname(otherFile.name)}`;
+        const params = {
+          Bucket: "cryptex-job-fair",
+          Key: ofName,
+          Body: Buffer.from(await otherFile.arrayBuffer()),
+          ContentType: otherFile.type,
+        };
+        await s3Client.send(new PutObjectCommand(params));
 
-            return `${process.env.AWS_URL}/${fileName}`;
-          })
-        );
         return NextResponse.json(
-          { cvFile: `${process.env.AWS_URL}/${cvFileName}`, otherFiles: oF },
+          {
+            cvFile: `${process.env.AWS_URL}/${cvFileName}`,
+            otherFiles: `${process.env.AWS_URL}/${ofName}`,
+          },
           { status: 202 }
         );
       }
-      return NextResponse.json({ cvFile: cvFileName }, { status: 202 });
+      return NextResponse.json(
+        { cvFile: `${process.env.AWS_URL}/${cvFileName}` },
+        { status: 202 }
+      );
     }
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { error: "Failed to upload files" },
+      { error: "Failed to upload files", e },
       { status: 500 }
     );
   }

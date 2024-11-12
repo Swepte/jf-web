@@ -1,10 +1,10 @@
+import { applyRateLimit } from "@/utils/rate-limit";
 import { PrismaClient } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 
-const prismaService = new PrismaClient({ log: ["error"] });
-
+const prismaService = new PrismaClient();
 const postSchema = yup.object({
   positions: yup.array(yup.string()).required("Position is required."),
   Applicants: yup
@@ -24,6 +24,8 @@ const postSchema = yup.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimitResponse = applyRateLimit(request);
+    if (rateLimitResponse) return rateLimitResponse;
     const data = await request.json();
     await postSchema.validate(data, { abortEarly: false });
     const { Applicants: applicants, ...app } = data;
@@ -108,6 +110,8 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
 
+    const rateLimitResponse = applyRateLimit(request);
+    if (rateLimitResponse) return rateLimitResponse;
     if (id) {
       const a = await prismaService.applications.findMany({
         where: {
@@ -117,7 +121,7 @@ export async function GET(request: NextRequest) {
           Applicants: true,
         },
       });
-      return NextResponse.json({ data: a }, { status: 400 });
+      return NextResponse.json({ data: a }, { status: 200 });
     }
     return NextResponse.json(
       { error: "Missing applicationID in the request body." },
@@ -135,6 +139,8 @@ export async function GET(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const { uuid, ...data } = await request.json();
+    const rateLimitResponse = applyRateLimit(request);
+    if (rateLimitResponse) return rateLimitResponse;
     if (uuid) {
       const a = await prismaService.applicants.update({
         data: {
