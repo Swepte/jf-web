@@ -6,7 +6,7 @@ import * as yup from "yup";
 import * as argon from "argon2";
 import { applyRateLimit } from "@/utils/rate-limit";
 
-const prismaService = new PrismaClient({ log: ["error"] });
+const prismaService = new PrismaClient();
 
 const postSchema = yup.object({
   recipientEmail: yup.string().email().required(),

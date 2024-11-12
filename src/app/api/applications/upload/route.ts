@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as path from "path";
 import * as _ from "lodash";
-import { upperCase } from "lodash";
 
 const s3Client = new S3Client({
   region: "ap-southeast-1",

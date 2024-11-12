@@ -54,13 +54,12 @@ interface Position {
 
 export default function Registration({
   email,
-  setStepper,
 }: {
   email: string;
   setStepper: (step: number) => void;
 }) {
   const matches = useMediaQuery("(min-width: 75em)");
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, { open }] = useDisclosure(false);
   const form = useForm<TSchema>({
     validate: yupResolver(postSchema),
     initialValues: {
@@ -104,14 +103,14 @@ export default function Registration({
         // @ts-expect-error req data
         form.append("applicationId", req?.data?.data?.uuid);
         form.append("cvFile", otherForm.values.cvFile as File);
-        otherForm.values.otherFile
-          ? form.append("otherFile", otherForm?.values?.otherFile)
-          : undefined;
+        if (otherForm.values.otherFile) {
+          form.append("otherFile", otherForm?.values?.otherFile);
+        }
         console.log(form);
         const upload = await postForm("/api/applications/upload", form);
         if (upload.status === HttpStatusCode.Accepted) {
           notifications.show({
-            color: 'green',
+            color: "green",
             title: "Success",
             message: "Application Successful!",
           });
@@ -232,8 +231,9 @@ export default function Registration({
               <IconConfetti size={70} style={{ marginBottom: 20 }} />
               <Text ta="center" size="sm">
                 Thank you for submitting your application! Our team has
-                successfully received it, and we'll be in touch with updates as
-                soon as we've reviewed everything. We appreciate your interest!
+                successfully received it, and we&apos;ll be in touch with
+                updates as soon as we&apos;ve reviewed everything. We appreciate
+                your interest!
               </Text>
               <Button
                 color="black"
